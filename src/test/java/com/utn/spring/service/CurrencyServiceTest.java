@@ -1,4 +1,6 @@
 package com.utn.spring.service;
 
-public class CurrencyServiceTest {
+public class CurrencyServiceTest
+{
+
 }

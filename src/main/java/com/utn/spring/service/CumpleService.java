@@ -1,6 +1,8 @@
 package com.utn.spring.service;
 
+import com.utn.spring.api.ApiArgentinianPlayer;
 import com.utn.spring.api.ApiCurrencyExhange;
+import com.utn.spring.api.SportDataApi;
 import com.utn.spring.model.*;
 import com.utn.spring.model.dto.PersonDTO;
 import com.utn.spring.repository.CumpleRepository;
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CumpleService
@@ -23,11 +27,13 @@ public class CumpleService
     private CumpleRepository cumpleRepository;
     private PersonaService personaService;
     private ApiCurrencyExhange apiCurrencyExhange;
+    private ApiArgentinianPlayer apiArgentinianPlayer;
 
-    public CumpleService(CumpleRepository cumpleRepository, PersonaService personaService,ApiCurrencyExhange apiCurrencyExhange) {
+    public CumpleService(CumpleRepository cumpleRepository, PersonaService personaService,ApiCurrencyExhange apiCurrencyExhange,ApiArgentinianPlayer apiArgentinianPlayer) {
         this.cumpleRepository = cumpleRepository;
         this.personaService = personaService;
         this.apiCurrencyExhange= apiCurrencyExhange;
+        this.apiArgentinianPlayer = apiArgentinianPlayer;
     }
 
     public void addBirthday(Cumpleañitos cumpleañitos)
@@ -81,6 +87,36 @@ public class CumpleService
 
             Page<PersonDTO>personDTOPage = new PageImpl<>(list,pageable, list.size());
             return personDTOPage;
+        }
+
+
+        @SneakyThrows
+        public Page<PersonDTO>getArgentinianIdol(Pageable pageable)
+        {
+            Page<Cumpleañitos>cumpleañitosPage = cumpleRepository.findAll(pageable);
+
+            SportDataApi sportDataApi = apiArgentinianPlayer.getData();
+
+            List<PersonDTO>peopleList = new ArrayList<>();
+
+            for(Cumpleañitos cumpleañitos : cumpleañitosPage.getContent())
+            {
+                for(Persona persona : cumpleañitos.getInvitados())
+                {
+                    if(persona instanceof Jugador)
+                    {
+                        PersonDTO dto = new PersonDTO();
+                        dto.setName(persona.getName()+""+persona.getLastName());
+                        if((((Jugador) persona).getAge() < 20)&&(((Jugador) persona).getAltura() > 1.80))
+                        {
+                            Set<PersonDTO> guest = new HashSet<>();
+                            dto.setGuest(guest);
+                        }
+                    }
+                }
+            }
+            Page<PersonDTO>dtoPage = new PageImpl<>(peopleList,pageable,peopleList.size());
+            return dtoPage;
         }
 
 }

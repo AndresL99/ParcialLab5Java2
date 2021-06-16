@@ -17,7 +17,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 
-import static com.utn.spring.utils.Utils.aBirthday;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -57,6 +56,16 @@ public class CumpleControllerTest
         //assertEquals(aPersonConversionList().get(0).getAmount(), response.getBody().get(0).getAmount());
     }
 
+    @Test
+    public void getArgentinianIdolTestOk()
+    {
+        //when(cumpleService.getArgentinianIdol(any())).thenReturn(aPlayerIdol());
+
+        ResponseEntity<List<PersonDTO>>responseEntity = cumpleController.getArgentinianIdol(aPageable());
+
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
 
 
     private static Page<PersonDTO> aPersonConversionList()
@@ -72,4 +81,7 @@ public class CumpleControllerTest
     public static Pageable aPageable(){
         return PageRequest.of(0,10);
     }
+
+
+
 }

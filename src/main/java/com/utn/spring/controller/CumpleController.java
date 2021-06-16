@@ -50,6 +50,14 @@ public class CumpleController
         return response(personDTOPage);
     }
 
+
+    @GetMapping("/getPlayer")
+    public ResponseEntity<List<PersonDTO>>getArgentinianIdol(Pageable pageable)
+    {
+        Page<PersonDTO>personPage = cumpleService.getArgentinianIdol(pageable);
+        return response(personPage);
+    }
+
     public static ResponseEntity response(Page page)
     {
         return ResponseEntity.status(page.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK)

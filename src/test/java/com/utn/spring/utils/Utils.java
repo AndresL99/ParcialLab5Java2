@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,11 +35,30 @@ public class Utils
         return PersonDTO.builder().name("Leo").typeCurrency(TypeCurrency.EURO).amount(200F).build();
     }
 
+
     public static void aBirthday()
     {
         Set<Persona>guest = null;
         new Cumpleañitos(3, LocalDate.of(2021,7,2),aPersona(),guest);
     }
+
+    public static Cumpleañitos aCumple()
+    {
+        return new Cumpleañitos(1,LocalDate.now(),aPersona(),new HashSet<>());
+    }
+
+
+    /*public static Page<Cumpleañitos> aPlayerIdol()
+    {
+        PersonDTO personDTO = new PersonDTO();
+        personDTO.setAge("20");
+        personDTO.setHeight(1.80);
+
+        Page<PersonDTO>page = new PageImpl<>(List.of(personDTO));
+        return page;
+    }*/
+
+
 
 
 }

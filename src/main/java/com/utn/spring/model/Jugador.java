@@ -17,6 +17,7 @@ public class Jugador extends Persona
     private Integer goles;
     private Integer minutosJugados;
     private Date fechaNacimiento;
+    private Integer age;
     @OneToOne
     private Currency currency;
 
